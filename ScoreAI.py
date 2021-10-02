@@ -214,54 +214,62 @@ def FindChess(str1):
     # 活二，眠二
     if True:
         # 攻
-        result = str1.find("0220")
+        result = str1.find("220")
         if (result != -1):
-            ChangeScoreValue(100, result)
-            ChangeScoreValue(100, result + 3)
-        result = str1.find("0221")
-        if (result != -1):
-            ChangeScoreValue(50, result)
-        result = str1.find("1220")
-        if (result != -1):
-            ChangeScoreValue(50, result + 3)
+            result = str1.find("0220")
+            if (result != -1):
+                ChangeScoreValue(50, result)
+                ChangeScoreValue(50, result + 3)
+            else:
+                ChangeScoreValue(25, result + 3)
+        else:
+            result = str1.find("022")
+            if (result != -1):
+                ChangeScoreValue(25, result)
 
         # 守
-        result = str1.find("0110")
+        result = str1.find("110")
         if (result != -1):
-            ChangeScoreValue(50, result)
-            ChangeScoreValue(50, result + 3)
-        result = str1.find("0112")
-        if (result != -1):
-            ChangeScoreValue(25, result)
-        result = str1.find("2110")
-        if (result != -1):
-            ChangeScoreValue(25, result + 3)
+            result = str1.find("0110")
+            if (result != -1):
+                ChangeScoreValue(25, result)
+                ChangeScoreValue(25, result + 3)
+            else:
+                ChangeScoreValue(12.5, result + 3)
+        else:
+            result = str1.find("011")
+            if (result != -1):
+                ChangeScoreValue(12.5, result)
 
     # 单子基础赋分
     if True:
         # 攻
-        result = str1.find("020")
+        result = str1.find("20")
         if (result != -1):
-            ChangeScoreValue(25, result)
-            ChangeScoreValue(25, result + 2)
-        result = str1.find("021")
-        if (result != -1):
-            ChangeScoreValue(12.5, result)
-        result = str1.find("120")
-        if (result != -1):
-            ChangeScoreValue(12.5, result + 2)
+            result = str1.find("020")
+            if (result != -1):
+                ChangeScoreValue(25, result)
+                ChangeScoreValue(25, result + 2)
+            else:
+                ChangeScoreValue(12.5, result + 2)
+        else:
+            result = str1.find("022")
+            if (result != -1):
+                ChangeScoreValue(12.5, result)
 
         # 守
-        result = str1.find("010")
+        result = str1.find("10")
         if (result != -1):
-            ChangeScoreValue(12.5, result)
-            ChangeScoreValue(12.5, result + 2)
-        result = str1.find("012")
-        if (result != -1):
-            ChangeScoreValue(6.25, result)
-        result = str1.find("210")
-        if (result != -1):
-            ChangeScoreValue(6.25, result + 2)
+            result = str1.find("010")
+            if (result != -1):
+                ChangeScoreValue(12.5, result)
+                ChangeScoreValue(12.5, result + 2)
+            else:
+                ChangeScoreValue(6.25, result + 2)
+        else:
+            result = str1.find("011")
+            if (result != -1):
+                ChangeScoreValue(6.25, result)
 
 
 def AiRun():

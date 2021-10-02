@@ -109,8 +109,10 @@ def DownChess(x, y):
         if isWin:
             if NowPlayer==1:
                 print("Player Win!")
+                DrawText("Player Win!",750,360)
             else:
                 print("PC Win!")
+                DrawText("PC Win!", 750, 360)
 
         # 换人
         if (NowPlayer == 1):
@@ -161,7 +163,9 @@ def DrawBoard():
 if __name__ == '__main__':
     global chessBoard
     pygame.init()
-    pygame.display.set_caption("xtx的五子棋 v0.2a")
+    img = pygame.image.load("counter_0.ico")
+    pygame.display.set_icon(img)  # 可以填img
+    pygame.display.set_caption("xtx的五子棋 v0.3a")
     clock = pygame.time.Clock()
     clock.tick(30)
     AIState = True  # 保证只执行一次
@@ -183,6 +187,8 @@ if __name__ == '__main__':
                 sys.exit(0)
             if event.type == pygame.MOUSEBUTTONDOWN:  # 鼠标按下
                 x, y = pygame.mouse.get_pos()  # 获取鼠标位置
+                if(x>720 or y>720):
+                    continue #防误触
                 # 曾经的重开键
                 # if (730 < x < 810 and 680 < y < 720):  # 重开
                 #     NowPlayer = 1

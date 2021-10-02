@@ -1,18 +1,23 @@
 import numpy as np
 
-x = y = type1 = offset = 0
-isDirectOut = False
-Score = np.zeros((15, 15), dtype=np.float)
+x = y = type1 = offset = 0 #xy轴棋盘坐标，正在切割字符串的切割方案，偏移率
+isDirectOut = False#是否直接输出
+Score = np.zeros((15, 15), dtype=np.float)#棋盘赋分矩阵
 
-chessBoard = np.zeros((15, 15), dtype=np.int32)
+chessBoard = np.zeros((15, 15), dtype=np.int32)#棋盘矩阵
 
 
-def ReFlashChessBoard():
-    global chessBoard
-    chessBoard = np.zeros((15, 15), dtype=np.int32)
-    print("Fine?")
+# def ReFlashChessBoard():
+#     global chessBoard
+#     chessBoard = np.zeros((15, 15), dtype=np.int32)
+#     print("Fine?")
 # 坐标处理
 def CoordinatesProcessing(result):
+    '''
+    处理Ai计算过程中倾斜offset的坐标计算问题
+    :param result: 获取的字符串find结果
+    :return: 处理好的x,y轴棋盘坐标
+    '''
     if (type1 == 1):  # 横
         return result, y
     if (type1 == 2):  # 竖
@@ -30,6 +35,12 @@ def CoordinatesProcessing(result):
 
 
 def ChangeScoreValue(value, result):
+    '''
+    转换倾斜坐标并赋分给Score矩阵
+    :param value: 赋分值
+    :param result: 获取的字符串find结果
+    :return: None
+    '''
     x, y = CoordinatesProcessing(result)
     Score[y][x] += value
 
@@ -38,6 +49,11 @@ def ChangeScoreValue(value, result):
 # 本AI只下白棋
 
 def FindChess(str1):
+    '''
+    从字符串中找到想要的役种（），赋分或者是直接输出
+    :param str1: 输入字符串
+    :return: 找到的Result值
+    '''
     global isDirectOut
     isDirectOut=False
     # 活四和冲四
@@ -273,6 +289,10 @@ def FindChess(str1):
 
 
 def AiRun():
+    '''
+    Ai调用函数，分割棋盘为字符串并送去检测赋分
+    :return: Ai建议的x,y轴坐标
+    '''
     global x, y, isDirectOut, type1, offset, Score
     Score = np.zeros((15, 15), dtype=np.float)
     x = y = 0

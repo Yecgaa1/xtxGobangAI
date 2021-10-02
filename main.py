@@ -7,14 +7,21 @@ from ScoreAI import chessBoard
 from ScoreAI import Score
 
 Mode = 1  # 0为玩家间，1为与AI
-size = width, height = 820, 720
-screen = pygame.display.set_mode(size, 0, 32)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+size = width, height = 820, 720#界面大小
+screen = pygame.display.set_mode(size, 0, 32)#screen控件初始化
+BLACK = (0, 0, 0)#白子的RGB参数
+WHITE = (255, 255, 255)#黑子的RGB参数
 NowPlayer = 1  # 黑1白2,黑色先手
 
 
 def DrawChess(x, y, who):
+    '''
+    棋子绘制函数
+    :param x: 本次落子的x坐标
+    :param y: 本次落子的y坐标
+    :param who: 绘制哪一方的棋子
+    :return: None
+    '''
     if who == 1:
         pygame.draw.circle(screen, BLACK, (x * 50 + 10, y * 50 + 10), 20)
     else:
@@ -22,6 +29,14 @@ def DrawChess(x, y, who):
 
 
 def WinCheck(x, y, NowPlayer):
+    '''
+    获胜判断函数
+    :param x: 次落子的x坐标
+    :param y: 本次落子的y坐标
+    :param NowPlayer: 现在正在进行游戏的玩家
+    :return: bool 是否存在获胜
+    '''
+
     str1 = ""
     Flag = False
 
@@ -101,6 +116,12 @@ def WinCheck(x, y, NowPlayer):
 
 
 def DownChess(x, y):
+    '''
+    落子判断函数,给玩家和机器人使用
+    :param x: 本次落子的x坐标
+    :param y: 本次落子的y坐标
+    :return: None
+    '''
     global NowPlayer
     if (chessBoard[y][x] == 0):
         chessBoard[y][x] = NowPlayer
@@ -122,6 +143,12 @@ def DownChess(x, y):
 
 
 def AngelProcess(x, y):
+    '''
+    转换鼠标的xy坐标为棋盘的xy坐标并附带坐标修正
+    :param x: 获取的鼠标单击的x坐标
+    :param y: 获取的鼠标单击的y坐标
+    :return: None
+    '''
     global NowPlayer
     if (x < 10):
         x = 0
@@ -139,6 +166,13 @@ def AngelProcess(x, y):
 
 
 def DrawText(str1, x, y):
+    '''
+    绘制字符到界面上
+    :param str1: 要绘制的字符串
+    :param x: 该字符的x轴中心坐标
+    :param y: 该字符的y轴中心坐标
+    :return: None
+    '''
     fontObj = pygame.font.Font(None, 20)  # 通过字体文件获得字体对象
     textSurfaceObj = fontObj.render(str1, True, BLACK)  # 配置要显示的文字
     textRectObj = textSurfaceObj.get_rect()  # 获得要显示的对象的rect
@@ -147,6 +181,10 @@ def DrawText(str1, x, y):
 
 
 def DrawBoard():
+    '''
+    绘制棋盘函数
+    :return: None
+    '''
     screen.fill((249, 223, 127))
     step = 0
 

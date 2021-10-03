@@ -6,7 +6,7 @@ Score = np.zeros((15, 15), dtype=np.float)#棋盘赋分矩阵
 
 chessBoard = np.zeros((15, 15), dtype=np.int32)#棋盘矩阵
 
-
+round=2#回合数
 # def ReFlashChessBoard():
 #     global chessBoard
 #     chessBoard = np.zeros((15, 15), dtype=np.int32)
@@ -264,31 +264,97 @@ def FindChess(str1):
         if (result != -1):
             result = str1.find("020")
             if (result != -1):
-                ChangeScoreValue(25, result)
-                ChangeScoreValue(25, result + 2)
+                result = str1.find("00200")
+                if (result != -1):
+                    ChangeScoreValue(12.5, result)
+                    ChangeScoreValue(25, result + 1)
+                    ChangeScoreValue(25, result + 3)
+                    ChangeScoreValue(12.5, result + 4)
+                else:
+                    result = str1.find("0200")
+                    if (result != -1):
+                        ChangeScoreValue(12.5, result)
+                        ChangeScoreValue(12.5, result + 2)
+                        ChangeScoreValue(6.25, result + 3)
+                    else:
+                        result = str1.find("0020")
+                        if (result != -1):
+                            ChangeScoreValue(12.5, result+1)
+                            ChangeScoreValue(12.5, result + 3)
+                            ChangeScoreValue(6.25, result)
+                        else:#x020x
+                            result = str1.find("020")
+                            ChangeScoreValue(6.25, result + 2)
+                            ChangeScoreValue(6.25, result)
             else:
-                ChangeScoreValue(12.5, result + 2)
+                result = str1.find("200")
+                if (result != -1):
+                    ChangeScoreValue(12.5, result + 2)
+                    ChangeScoreValue(6.25, result)
+                else:#x20x
+                    result = str1.find("20")
+                    ChangeScoreValue(6.25/2, result+1)
         else:
-            result = str1.find("022")
+            result = str1.find("02")
             if (result != -1):
-                ChangeScoreValue(12.5, result)
+                result = str1.find("002")
+                if (result != -1):
+                    ChangeScoreValue(12.5, result + 1)
+                    ChangeScoreValue(6.25, result)
+                else:  # x02x
+                    result = str1.find("02")
+                    ChangeScoreValue(6.25/2, result)
+
 
         # 守
         result = str1.find("10")
         if (result != -1):
             result = str1.find("010")
             if (result != -1):
-                ChangeScoreValue(12.5, result)
-                ChangeScoreValue(12.5, result + 2)
+                result = str1.find("00100")
+                if (result != -1):
+                    ChangeScoreValue(6.25, result)
+                    ChangeScoreValue(12.5, result + 1)
+                    ChangeScoreValue(12.5, result + 3)
+                    ChangeScoreValue(6.25, result + 4)
+                else:
+                    result = str1.find("0100")
+                    if (result != -1):
+                        ChangeScoreValue(6.25, result)
+                        ChangeScoreValue(6.25, result + 2)
+                        ChangeScoreValue(6.25/2, result + 3)
+                    else:
+                        result = str1.find("0010")
+                        if (result != -1):
+                            ChangeScoreValue(6.25, result + 1)
+                            ChangeScoreValue(6.25, result + 3)
+                            ChangeScoreValue(6.25/2, result)
+                        else:  # x020x
+                            result = str1.find("010")
+                            ChangeScoreValue(6.25/2, result + 2)
+                            ChangeScoreValue(6.25/2, result)
             else:
-                ChangeScoreValue(6.25, result + 2)
+                result = str1.find("100")
+                if (result != -1):
+                    ChangeScoreValue(6.25, result + 2)
+                    ChangeScoreValue(6.25/2, result)
+                else:  # x20x
+                    result = str1.find("10")
+                    ChangeScoreValue(6.25 / 4, result + 1)
         else:
-            result = str1.find("011")
+            result = str1.find("01")
             if (result != -1):
-                ChangeScoreValue(6.25, result)
+                result = str1.find("001")
+                if (result != -1):
+                    ChangeScoreValue(6.25, result + 1)
+                    ChangeScoreValue(6.25/2, result)
+                else:  # x02x
+                    result = str1.find("01")
+                    ChangeScoreValue(6.25 / 4, result)
 
 
 def AiRun():
+    global round
     '''
     Ai调用函数，分割棋盘为字符串并送去检测赋分
     :return: Ai建议的x,y轴坐标
@@ -361,7 +427,9 @@ def AiRun():
         if isDirectOut:
             return CoordinatesProcessing(result)
 
-    print("Ai Run Finish!")
+    print("Ai Run Finish!Round is"+str(round))
+    np.savetxt('Score/'+str(round)+'.csv', Score, delimiter=',')
     y, x = (np.where(Score == np.max(Score)))
+    round+=2
 
     return x[0], y[0]

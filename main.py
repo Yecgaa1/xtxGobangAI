@@ -1,7 +1,8 @@
 import numpy as np
 import pygame
 import sys
-
+import os
+import shutil
 import ScoreAI
 from ScoreAI import chessBoard
 from ScoreAI import Score
@@ -200,6 +201,12 @@ def DrawBoard():
 
 if __name__ == '__main__':
     global chessBoard
+
+    try:
+        shutil.rmtree('Score')
+        os.mkdir('Score')
+    except:
+        print("没有要清理的文件")
     pygame.init()
     img = pygame.image.load("counter_0.ico")
     pygame.display.set_icon(img)  # 可以填img

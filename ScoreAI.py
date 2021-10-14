@@ -7,6 +7,10 @@ Score = np.zeros((15, 15), dtype=np.float)#棋盘赋分矩阵
 chessBoard = np.zeros((15, 15), dtype=np.int32)#棋盘矩阵
 
 round=2#回合数
+
+fightCoefficient=0.5
+defendCoefficient=1
+isFight=TrueisFight=True
 # def ReFlashChessBoard():
 #     global chessBoard
 #     chessBoard = np.zeros((15, 15), dtype=np.int32)
@@ -42,13 +46,18 @@ def ChangeScoreValue(value, result):
     :return: None
     '''
     x, y = CoordinatesProcessing(result)
-    Score[y][x] += value
+    if(chessBoard[y][x]==0):#规避单子算法带来的问题
+        if(isFight == True):
+            Score[y][x] += value*  fightCoefficient
+        else:
+            Score[y][x] += value * defendCoefficient
 
 
 # 本AI主攻！！！！，详情见笔记本
 # 本AI只下白棋
 
 def FindChess(str1):
+    global isFight
     '''
     从字符串中找到想要的役种（），赋分或者是直接输出
     :param str1: 输入字符串
@@ -106,6 +115,7 @@ def FindChess(str1):
     # 活三
     # 攻
     if True:
+        isFight=True
         result = str1.find("2220")
         if result != -1:
             result = str1.find("02220")
@@ -116,8 +126,8 @@ def FindChess(str1):
                     return result + 1
                 result = str1.find("1022201")
                 if result != -1:
-                    ChangeScoreValue(150, result + 1)
-                    ChangeScoreValue(150, result + 5)
+                    ChangeScoreValue(100, result + 1)
+                    ChangeScoreValue(100, result + 5)
                 result = str1.find("1022200")
                 if result != -1:
                     isDirectOut = True
@@ -130,15 +140,15 @@ def FindChess(str1):
             if result != -1:
                 result = str1.find("122200")
                 if result != -1:
-                    ChangeScoreValue(150, result + 4)
-                    ChangeScoreValue(50, result + 5)
+                    ChangeScoreValue(50, result + 4)
+                    ChangeScoreValue(25, result + 5)
         else:
             result = str1.find("0222")
             if result != -1:
                 result = str1.find("002221")
                 if result != -1:
-                    ChangeScoreValue(50, result)
-                    ChangeScoreValue(150, result + 1)
+                    ChangeScoreValue(25, result)
+                    ChangeScoreValue(50, result + 1)
         result = str1.find("2022")
         if result != -1:
             result = str1.find("020220")
@@ -147,12 +157,12 @@ def FindChess(str1):
                 return result + 2
             result = str1.find("020221")
             if result != -1:
-                ChangeScoreValue(150, result)
-                ChangeScoreValue(150, result + 2)
+                ChangeScoreValue(100, result)
+                ChangeScoreValue(100, result + 2)
             result = str1.find("120220")
             if result != -1:
-                ChangeScoreValue(150, result + 2)
-                ChangeScoreValue(150, result + 5)
+                ChangeScoreValue(100, result + 2)
+                ChangeScoreValue(100, result + 5)
         result = str1.find("2202")
         if result != -1:
             result = str1.find("022020")
@@ -161,14 +171,15 @@ def FindChess(str1):
                 return result + 3
             result = str1.find("022021")
             if result != -1:
-                ChangeScoreValue(150, result)
-                ChangeScoreValue(150, result + 3)
+                ChangeScoreValue(100, result)
+                ChangeScoreValue(100, result + 3)
             result = str1.find("122020")
             if result != -1:
-                ChangeScoreValue(150, result + 3)
-                ChangeScoreValue(150, result + 5)
+                ChangeScoreValue(100, result + 3)
+                ChangeScoreValue(100, result + 5)
 
     # 守
+    isFight = False
     if True:
         result = str1.find("1110")
         if (result != -1):
@@ -187,22 +198,21 @@ def FindChess(str1):
                 if (result != -1):
                     ChangeScoreValue(100, result)
                     ChangeScoreValue(100, result + 1)
-                    ChangeScoreValue(20, result + 5)
+                    ChangeScoreValue(50, result + 5)
             result = str1.find("211100")
             if (result != -1):
-                ChangeScoreValue(100, result + 4)
-                ChangeScoreValue(100, result + 5)
+                ChangeScoreValue(25, result + 4)
+                ChangeScoreValue(25, result + 5)
         result = str1.find("001112")
         if (result != -1):
-            ChangeScoreValue(100, result)
-            ChangeScoreValue(100, result + 1)
+            ChangeScoreValue(25, result)
+            ChangeScoreValue(25, result + 1)
         result = str1.find("1011")
         if (result != -1):
             result = str1.find("010110")
             if (result != -1):
-                ChangeScoreValue(50, result)
-                ChangeScoreValue(100, result + 2)
-                ChangeScoreValue(50, result + 5)
+                isDirectOut = True
+                return result + 2
             result = str1.find("010112")
             if (result != -1):
                 ChangeScoreValue(100, result)
@@ -215,9 +225,8 @@ def FindChess(str1):
         if (result != -1):
             result = str1.find("011010")
             if (result != -1):
-                ChangeScoreValue(50, result)
-                ChangeScoreValue(100, result + 3)
-                ChangeScoreValue(50, result + 5)
+                isDirectOut = True
+                return result + 3
             result = str1.find("011012")
             if (result != -1):
                 ChangeScoreValue(100, result)
@@ -230,6 +239,7 @@ def FindChess(str1):
     # 活二，眠二
     if True:
         # 攻
+        isFight = True
         result = str1.find("220")
         if (result != -1):
             result = str1.find("0220")
@@ -237,29 +247,102 @@ def FindChess(str1):
                 ChangeScoreValue(50, result)
                 ChangeScoreValue(50, result + 3)
             else:
-                ChangeScoreValue(25, result + 3)
+                result = str1.find("2220")#防止伪活二
+                if(result == -1):
+                    result = str1.find("220")
+                    ChangeScoreValue(12.5, result + 2)
         else:
             result = str1.find("022")
             if (result != -1):
+                result = str1.find("0222")
+                if (result == -1):
+                    result = str1.find("022")
+                    ChangeScoreValue(12.5, result)
+        result = str1.find("202")
+        if (result != -1):
+            result = str1.find("02020")
+            if (result != -1):
                 ChangeScoreValue(25, result)
+                ChangeScoreValue(25, result+4)
+                ChangeScoreValue(50, result + 2)
+            result = str1.find("12020")
+            if (result != -1):
+                ChangeScoreValue(12.5, result + 4)
+                ChangeScoreValue(25, result + 2)
+            result = str1.find("02021")
+            if (result != -1):
+                ChangeScoreValue(12.5, result)
+                ChangeScoreValue(25, result + 2)
+            else:
+                result = str1.find("202")
+                ChangeScoreValue(6.25, result+1)
+
 
         # 守
+        isFight = False
         result = str1.find("110")
         if (result != -1):
             result = str1.find("0110")
             if (result != -1):
-                ChangeScoreValue(25, result)
-                ChangeScoreValue(25, result + 3)
-            else:
+                ChangeScoreValue(12.5, result)
                 ChangeScoreValue(12.5, result + 3)
+            else:
+                result = str1.find("1110")  # 防止伪活二
+                if (result == -1):
+                    result = str1.find("110")
+                    ChangeScoreValue(12.5, result + 2)
         else:
             result = str1.find("011")
             if (result != -1):
+                if (result != -1):
+                    result = str1.find("0111")
+                    if (result == -1):
+                        result = str1.find("011")
+                        ChangeScoreValue(12.5, result)
+        result = str1.find("101")
+        if (result != -1):
+            result = str1.find("01010")
+            if (result != -1):
                 ChangeScoreValue(12.5, result)
+                ChangeScoreValue(12.5, result + 4)
+                ChangeScoreValue(12.5, result + 2)#test
+            result = str1.find("21010")
+            if (result != -1):
+                ChangeScoreValue(6.25, result + 4)
+                ChangeScoreValue(12.5, result + 2)
+            result = str1.find("01012")
+            if (result != -1):
+                ChangeScoreValue(6.25, result)
+                ChangeScoreValue(12.5, result + 2)
+            else:
+                result = str1.find("101")
+                ChangeScoreValue(6.25/2, result + 1)
+    #将变活三处理
+    # 守
+    if True:
+        isFight =False
+        result = str1.find("1001")
+        if (result != -1):
+            result = str1.find("210010")
+            if (result != -1):
+                ChangeScoreValue(12.5, result+2)
+                ChangeScoreValue(12.5, result + 3)
+            result = str1.find("010012")
+            if (result != -1):
+                ChangeScoreValue(12.5, result + 2)
+                ChangeScoreValue(12.5, result + 3)
+            result = str1.find("010010")
+            if (result != -1):
+                ChangeScoreValue(12.5, result)
+                ChangeScoreValue(25, result + 2)
+                ChangeScoreValue(25, result + 3)
+                ChangeScoreValue(12.5, result+5)
+
 
     # 单子基础赋分
     if True:
         # 攻
+        isFight = True
         result = str1.find("20")
         if (result != -1):
             result = str1.find("020")
@@ -307,6 +390,7 @@ def FindChess(str1):
 
 
         # 守
+        isFight = False
         result = str1.find("10")
         if (result != -1):
             result = str1.find("010")

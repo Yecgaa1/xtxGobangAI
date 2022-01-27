@@ -7,6 +7,7 @@ import ScoreAI
 from ScoreAI import chessBoard
 from ScoreAI import Score
 
+
 Mode = 1  # 0为玩家间，1为与AI
 size = width, height = 820, 720#界面大小
 screen = pygame.display.set_mode(size, 0, 32)#screen控件初始化
